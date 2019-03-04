@@ -11,7 +11,8 @@ image_write_path = "../images/itu_gray.png"
 
 # fotoğraf okuma fonskiyonu, ikinci parametre okuma modu
 #image = cv2.imread(image_path, 1)
-image = cv2.imread(image_path)
+image = cv2.imread(image_path) #read as BGR
+#image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
 # image.shape BGR görüntüler için 3 veri döndürür
 # Height, Width, Channels = image.shape
@@ -55,12 +56,18 @@ cv2.imwrite(image_write_path, gray_image)
 # gray bir görsel 2 boyutlu, BGR ise 3 boyutludur
 # alttaki kodu örnek olarak kullanabilirsiniz
 
-# H, W, C = image.shape
-## yeni, boş bir görsel oluştur
-# my_gray = np.zeros((H,W), np.uint8) # unsigned 8-bit'lik integer tipinde HxW'lık boş bir matris oluştur.
+H, W, C = image.shape
+# yeni, boş bir görsel oluştur
+my_gray = np.zeros((H,W), np.uint8) # unsigned 8-bit'lik integer tipinde HxW'lık boş bir matris oluştur.
 
-# for i in range(H):
-# 	for j in range(W):
-#		# burada gerekli ortalamayı bul ve my_gray'in gerekli yerine eşitle
+# alttaki kodun çok yavaş çalıştığını göreceksiniz. Sebebi for döngüsünü bizim yazmamız diyebiliriz.
+for i in range(H):
+	for j in range(W):
+		# burada gerekli ortalamayı bul ve my_gray'in gerekli yerine eşitle
+		#my_gray[i,j] = sum(image[i,j]) // C
+		# 0.21R + 0.72G + 0.07B
+		my_gray[i,j] = 0.07 * image[i,j,0] + 0.72 * image[i,j,1] + 0.21 * image[i,j,2]
 
 
+cv2.imshow("my_gray", my_gray)
+cv2.waitKey()
